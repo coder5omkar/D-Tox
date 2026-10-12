@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -50,6 +52,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import com.dtox.app.audio.AmbientSound
+import com.dtox.app.audio.AmbientSoundEffect
 import com.dtox.app.data.BreathPattern
 import com.dtox.app.data.Completion
 import com.dtox.app.data.Exercise
@@ -86,6 +90,9 @@ fun ExercisePlayerScreen(
     var completion by remember { mutableStateOf<Completion?>(null) }
     var attempt by rememberSaveable { mutableIntStateOf(0) }
 
+    var soundId by remember { mutableStateOf(store.soundId) }
+    AmbientSoundEffect(soundId, active = step == Step.ACTIVE)
+
     BackHandler { onExit() }
 
     when (step) {
@@ -107,6 +114,11 @@ fun ExercisePlayerScreen(
                     exercise = exercise,
                     kind = kind,
                     haptics = haptics,
+                    soundId = soundId,
+                    onPickSound = { sound ->
+                        soundId = sound.id
+                        store.soundId = sound.id
+                    },
                     onDone = {
                         completion = store.recordCompletion(exercise)
                         onSessionRecorded()
@@ -118,6 +130,11 @@ fun ExercisePlayerScreen(
                 is ExerciseKind.Steps -> StepsExercise(
                     exercise = exercise,
                     kind = kind,
+                    soundId = soundId,
+                    onPickSound = { sound ->
+                        soundId = sound.id
+                        store.soundId = sound.id
+                    },
                     onDone = {
                         completion = store.recordCompletion(exercise)
                         onSessionRecorded()
@@ -188,6 +205,8 @@ private fun BreathingExercise(
     exercise: Exercise,
     kind: ExerciseKind.Breathing,
     haptics: Boolean,
+    soundId: String,
+    onPickSound: (AmbientSound) -> Unit,
     onDone: () -> Unit,
     onExit: () -> Unit,
 ) {
@@ -312,7 +331,9 @@ private fun BreathingExercise(
             textAlign = TextAlign.Center,
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(14.dp))
+        SoundPicker(currentId = soundId, onPick = onPickSound)
+        Spacer(Modifier.height(14.dp))
 
         OutlinedButton(onClick = onExit, modifier = Modifier.fillMaxWidth()) {
             Text("Exit")
@@ -331,6 +352,8 @@ private fun BreathingExercise(
 private fun StepsExercise(
     exercise: Exercise,
     kind: ExerciseKind.Steps,
+    soundId: String,
+    onPickSound: (AmbientSound) -> Unit,
     onDone: () -> Unit,
     onExit: () -> Unit,
 ) {
@@ -424,7 +447,9 @@ private fun StepsExercise(
             )
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(16.dp))
+        SoundPicker(currentId = soundId, onPick = onPickSound)
+        Spacer(Modifier.height(16.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -444,6 +469,24 @@ private fun StepsExercise(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+    }
+}
+
+@Composable
+private fun SoundPicker(currentId: String, onPick: (AmbientSound) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        AmbientSound.entries.forEach { sound ->
+            FilterChip(
+                selected = currentId == sound.id,
+                onClick = { onPick(sound) },
+                label = {
+                    Text(sound.label, style = MaterialTheme.typography.labelMedium)
+                },
+            )
+        }
     }
 }
 

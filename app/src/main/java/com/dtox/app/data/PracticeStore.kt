@@ -52,6 +52,11 @@ class PracticeStore(context: Context) {
         get() = sp.getString(KEY_THEME, "forest") ?: "forest"
         set(value) = sp.edit { putString(KEY_THEME, value) }
 
+    /** Ambient sound played during exercises; see [com.dtox.app.audio.AmbientSound]. */
+    var soundId: String
+        get() = sp.getString(KEY_SOUND, "off") ?: "off"
+        set(value) = sp.edit { putString(KEY_SOUND, value) }
+
     // ---- shop unlocks --------------------------------------------------
 
     val unlocked: Set<String>
@@ -257,5 +262,6 @@ class PracticeStore(context: Context) {
         private const val KEY_DAYS_PRACTICED = "days_practiced"
         private const val KEY_BEST_STREAK = "best_streak"
         private const val KEY_DAY_COUNTS = "day_counts"
+        private const val KEY_SOUND = "sound"
     }
 }

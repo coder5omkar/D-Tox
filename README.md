@@ -51,6 +51,10 @@ mindfulness space:
   dies; it only dims a little when you're away.
 - **Progress page** — sessions, total time practiced, days, current and best
   streak, a 7-day chart and a per-exercise breakdown
+- **Calming sounds** — rain, ocean, stream and forest-with-birds, played
+  during exercises. Every sound is **synthesised in code**: no audio files,
+  no downloads, no permissions, no size cost. It fades in, pauses for phone
+  calls and stops when you're done.
 - **Shop** — spend gems on two extra themes (Midnight, Paper) and two rare
   breathing patterns (Coherent 6·6, Extended Exhale 4·8)
 - **Zen mode** — hide gems, streaks and the plant; just exercises
@@ -147,6 +151,8 @@ shortcut is the only easy way in.
 - **Progress page** — totals, streaks, a 7-day chart and a per-exercise
   breakdown with time practiced
 - Shop with themes and extra breathing patterns — gems only, never money
+- Calming ambient sounds (rain, ocean, stream, forest) — synthesised in code,
+  no files, no permissions
 - Zen mode for a pure, reward-free practice
 - "The science" page with the real citations, and honest caveats
 
@@ -225,6 +231,13 @@ keyPassword=…
 
 With that file present, `gradlew assembleRelease` produces a signed
 `app-release.apk`.
+
+## Made by
+
+**coder5omkar** — [github.com/coder5omkar](https://github.com/coder5omkar)
+
+D-Tox is free and open source (GPL-3.0). You'll also find this card at the
+bottom of the Progress page in the app.
 
 ## License
 
