@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.dtox.app.ui.DToxRoot
-import com.dtox.app.ui.theme.DToxTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -38,14 +37,12 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            DToxTheme {
-                DToxRoot(
-                    gateRequest = gateRequest,
-                    onClearGate = { gateRequest = null },
-                    onRequestGate = { pkg -> gateRequest = pkg },
-                    onLaunchApp = { pkg -> openApp(pkg) },
-                )
-            }
+            DToxRoot(
+                gateRequest = gateRequest,
+                onClearGate = { gateRequest = null },
+                onRequestGate = { pkg -> gateRequest = pkg },
+                onLaunchApp = { pkg -> openApp(pkg) },
+            )
         }
     }
 

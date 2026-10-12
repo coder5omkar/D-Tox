@@ -45,6 +45,7 @@ fun HomeScreen(
     totalPauses: Int,
     totalSeconds: Long,
     onSettings: () -> Unit,
+    onPractice: () -> Unit,
     onPickApps: () -> Unit,
     onStartGate: (AppInfo) -> Unit,
     onPin: (AppInfo) -> Unit,
@@ -61,6 +62,13 @@ fun HomeScreen(
                 color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.weight(1f))
+            IconButton(onClick = onPractice) {
+                Icon(
+                    imageVector = DToxIcons.Practice,
+                    contentDescription = "Practice",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
             IconButton(onClick = onSettings) {
                 Icon(
                     imageVector = DToxIcons.Settings,

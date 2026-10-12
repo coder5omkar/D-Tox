@@ -4,16 +4,17 @@
 
 **One quiet breath before the app opens.**
 
-D-Tox is a tiny, calm Android app that turns opening a distracting app into a
-30-second guided breathing pause. Built to be the opposite of the usual
-"detox" apps: no bloat, no ads, no account, no subscription — and **zero
-Android permissions**.
+D-Tox is a tiny, calm Android app with two sides: it turns opening a
+distracting app into a 30-second breathing pause, **and** it gives you a
+quiet practice space — eight evidence-informed exercises, a plant that grows
+with you, and gems you earn (never buy). No bloat, no ads, no account, no
+subscription — and **zero Android permissions**.
 
 [![Release](https://img.shields.io/github/v/release/coder5omkar/D-Tox?style=flat-square&color=blueviolet&label=release)](https://github.com/coder5omkar/D-Tox/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/coder5omkar/D-Tox/total?style=flat-square&color=blue)](https://github.com/coder5omkar/D-Tox/releases)
 ![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white)
 ![Permissions](https://img.shields.io/badge/permissions-0-brightgreen?style=flat-square)
-![APK size](https://img.shields.io/badge/APK-1.2%20MB-blue?style=flat-square)
+![APK size](https://img.shields.io/badge/APK-1.3%20MB-blue?style=flat-square)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square)](LICENSE)
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.4.21-7F52FF?style=flat-square&logo=kotlin&logoColor=white)
@@ -21,6 +22,8 @@ Android permissions**.
 ![Gradle](https://img.shields.io/badge/Gradle-9.8.1-02303A?style=flat-square&logo=gradle&logoColor=white)
 
 <img src="docs/screenshots/01-home.png" width="190" />&nbsp;<img src="docs/screenshots/02-picker.png" width="190" />&nbsp;<img src="docs/screenshots/03-breath.png" width="190" />&nbsp;<img src="docs/screenshots/04-ready.png" width="190" />
+
+<img src="docs/screenshots/06-practice.png" width="190" />&nbsp;<img src="docs/screenshots/07-breath.png" width="190" />&nbsp;<img src="docs/screenshots/08-shop.png" width="190" />&nbsp;<img src="docs/screenshots/09-zen.png" width="190" />
 
 </div>
 
@@ -33,11 +36,29 @@ get a 30-second guided breathing pause — an animated ring with inhale / hold /
 exhale phases — before the app can open. The **Open** button stays locked
 until the breath is finished.
 
+### Practice — the other half
+
+Open **Practice** from the home screen for a small, self-contained mindfulness
+space:
+
+- **8 exercises** — Box Breathing, 4·7·8, Cyclic Sighing, Three Sighs,
+  5·4·3·2·1 Grounding, Body Scan, Feel Your Feet, One Good Thing
+- **Mood check-ins** before and after — if your mood lifts, +1 bonus gem
+- **Gems** earned by practicing, never sold (1–3 per exercise plus bonuses)
+- **Streaks** with one grace day, so a single missed day doesn't wipe it
+- **A plant that grows** across 8 stages, drawn entirely in code; it dulls
+  after a few idle days but never dies
+- **Shop** — spend gems on two extra themes (Midnight, Paper) and two rare
+  breathing patterns (Coherent 6·6, Extended Exhale 4·8)
+- **Zen mode** — hide gems, streaks and the plant; just exercises
+- **The science** — a plain-language page with the actual studies behind the
+  exercises, and honest caveats
+
 ## Why D-Tox is different
 
 | | Typical detox app | **D-Tox** |
 | --- | --- | --- |
-| Size | 30–150 MB | **1.2 MB** |
+| Size | 30–150 MB | **1.3 MB** |
 | Price | Subscription | **Free (GPL-3.0)** |
 | Android permissions | Accessibility, usage access, network… | **None** |
 | Internet | Ads, analytics, accounts | **No `INTERNET` permission at all** |
@@ -102,13 +123,30 @@ shortcut is the only easy way in.
 
 ## Features
 
+**The gate**
+
 - 30-second breathing gate, configurable **15–60 s**
-- Two patterns: **Box 4·4·4·4** and **Calm 4·7·8**
+- Patterns: **Box 4·4·4·4**, **Calm 4·7·8**, **Sigh 3·1·6** (+ 2 unlockables)
 - Animated breathing ring with phase countdown, haptic ticks
 - Home-screen badge shortcuts, pinned straight from the app
 - **Open** locked until the breath completes (optional early-open switch)
 - Local stats: pauses today · all time · total time breathed
-- Dark, calm Material 3 theme — quiet by design
+
+**The practice**
+
+- 8 guided exercises — breathing and step-by-step grounding, body and
+  gratitude practices
+- Mood check-ins with a small bonus when you feel better afterwards
+- Gems, streaks with a grace day, and a plant that grows across 8 stages
+- Shop with themes and extra breathing patterns — gems only, never money
+- Zen mode for a pure, reward-free practice
+- "The science" page with the real citations, and honest caveats
+
+**The fundamentals**
+
+- Zero permissions, no internet, no accounts, no ads
+- Three calm Material 3 themes (Forest free; Midnight and Paper unlockable)
+- Everything stored locally in one `SharedPreferences` file
 
 ## Project layout
 
@@ -117,15 +155,27 @@ app/src/main/java/com/dtox/app/
 ├── MainActivity.kt          single activity; receives gate requests
 ├── data/
 │   ├── Apps.kt              lists launcher apps (permission-free)
-│   ├── BreathPattern.kt     breathing phases, plain arithmetic
-│   └── Prefs.kt             SharedPreferences: gated apps, settings, stats
+│   ├── BreathPattern.kt     breathing phases, incl. unlockable patterns
+│   ├── Exercise.kt          the 8-exercise catalog
+│   ├── PracticeStore.kt     gems, streaks, sessions, unlocks, Zen mode
+│   ├── Prefs.kt             gate settings + gate stats
+│   └── Shop.kt              shop catalog
 ├── ui/
-│   ├── DToxRoot.kt          tiny state-based navigation
-│   ├── HomeScreen.kt        gated apps + stats
+│   ├── DToxRoot.kt          tiny state navigation + theme wiring
+│   ├── HomeScreen.kt        gated apps + stats (the gate side)
 │   ├── PickerScreen.kt      searchable app picker
-│   ├── SettingsScreen.kt    breath length, pattern, haptics
+│   ├── SettingsScreen.kt    gate settings, Zen mode
 │   ├── BreathScreen.kt      the 30-second gate (call-safe timer)
-│   └── DToxIcons.kt         hand-rolled icons, no extra dependency
+│   ├── ScienceScreen.kt     the research, in plain language
+│   ├── DToxIcons.kt         hand-rolled icons, no extra dependency
+│   ├── breath/
+│   │   └── BreathCommon.kt  shared breathing ring + phase helpers
+│   ├── practice/
+│   │   ├── PracticeHomeScreen.kt
+│   │   ├── ExercisePlayerScreen.kt   player, mood checks, completion
+│   │   ├── PlantView.kt     the plant, drawn in code — no image assets
+│   │   └── ShopScreen.kt
+│   └── theme/Theme.kt       Forest / Midnight / Paper
 └── util/
     ├── ContextExt.kt
     └── Shortcuts.kt         pins the badge shortcuts
@@ -133,19 +183,21 @@ app/src/main/java/com/dtox/app/
 
 ## Roadmap
 
-- **v1.1 (planned): "Hidden mode"** — optional integration with
+- **"Hidden mode" (planned)** — optional integration with
   [Shizuku](https://shizuku.rikka.app/) that truly hides gated apps from the
   drawer, search and recents, and unhides them only for the breath-then-launch
   flow. D-Tox itself would still declare zero Android permissions.
 - Accessibility "Shield" mode for a single-app alternative.
-- Sound cues, home-screen widget, streaks, custom patterns.
+- Ambient sounds, home-screen widget, custom breathing patterns, manual
+  backup/export.
 
 ## Build details
 
 - Kotlin 2.4.21 · Jetpack Compose (BOM 2026.09) · Material 3
 - AGP 9.4.1 (built-in Kotlin) · Gradle 9.8.1
 - `minSdk 26` (Android 8.0) · `compileSdk 37` · `targetSdk 37`
-- Release build: R8 + resource shrinking → ~1.2 MB APK
+- Release build: R8 + resource shrinking → ~1.3 MB APK (the whole practice
+  module added ~50 KB)
 
 ### Signing a release build
 

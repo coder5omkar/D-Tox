@@ -31,14 +31,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dtox.app.data.BreathPattern
+import com.dtox.app.data.PracticeStore
 import com.dtox.app.data.Prefs
 
 @Composable
-fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
+fun SettingsScreen(
+    prefs: Prefs,
+    store: PracticeStore,
+    zenMode: Boolean,
+    onZenChange: (Boolean) -> Unit,
+    onBack: () -> Unit,
+) {
     var breathSeconds by remember { mutableIntStateOf(prefs.breathSeconds) }
     var patternId by remember { mutableStateOf(prefs.patternId) }
     var haptics by remember { mutableStateOf(prefs.haptics) }
     var allowSkip by remember { mutableStateOf(prefs.allowSkip) }
+
+    val patterns = BreathPattern.entries.filter { store.patternAvailable(it) }
 
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
         Row(
@@ -57,7 +66,7 @@ fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp, vertical = 8.dp),
         ) {
-            SectionLabel("Breath length")
+            SectionLabel("Gate breath length")
             Row(
                 modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -75,12 +84,12 @@ fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
             }
 
             Spacer(Modifier.height(20.dp))
-            SectionLabel("Breathing pattern")
+            SectionLabel("Gate breathing pattern")
             Row(
                 modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                BreathPattern.entries.forEach { pattern ->
+                patterns.forEach { pattern ->
                     FilterChip(
                         selected = patternId == pattern.id,
                         onClick = {
@@ -91,6 +100,12 @@ fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
                     )
                 }
             }
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text = "More patterns unlock in the Practice shop.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
 
             Spacer(Modifier.height(20.dp))
             SwitchRow(
@@ -104,7 +119,7 @@ fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
             )
             SwitchRow(
                 title = "Allow opening early",
-                subtitle = "Skip the rest of the breath — try to keep this off",
+                subtitle = "Skip the rest of the gate breath — try to keep this off",
                 checked = allowSkip,
                 onChange = {
                     allowSkip = it
@@ -113,9 +128,18 @@ fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
             )
 
             Spacer(Modifier.height(24.dp))
+            SectionLabel("Practice")
+            SwitchRow(
+                title = "Zen mode",
+                subtitle = "Hide gems, streaks and the plant — just exercises",
+                checked = zenMode,
+                onChange = onZenChange,
+            )
+
+            Spacer(Modifier.height(24.dp))
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("How to use", style = MaterialTheme.typography.titleMedium)
+                    Text("How the gate works", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = "1. Choose the apps you want to slow down.\n" +
@@ -131,11 +155,12 @@ fun SettingsScreen(prefs: Prefs, onBack: () -> Unit) {
             Spacer(Modifier.height(16.dp))
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("D-Tox 1.0.0", style = MaterialTheme.typography.titleMedium)
+                    Text("D-Tox 1.1.0", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = "Zero permissions. No internet. No background services. " +
-                            "No accounts. No subscriptions. Nothing ever leaves this phone.",
+                            "No accounts. No subscriptions. Gems are earned by practicing — " +
+                            "never sold. Nothing ever leaves this phone.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

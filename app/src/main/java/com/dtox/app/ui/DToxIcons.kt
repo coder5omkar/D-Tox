@@ -1,6 +1,7 @@
 package com.dtox.app.ui
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.addPathNodes
@@ -34,7 +35,22 @@ object DToxIcons {
         )
     }
 
-    private fun icon(name: String, path: String): ImageVector =
+    val Shield: ImageVector by lazy {
+        icon("Shield", "M12,5.8 L16.4,7.6 C16.4,11.8 14.7,15.6 12,17.6 C9.3,15.6 7.6,11.8 7.6,7.6 Z")
+    }
+
+    /** Concentric circles — the practice/breath mark. */
+    val Practice: ImageVector by lazy {
+        icon(
+            "Practice",
+            "M12,12 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0 " +
+                "M12,12 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 " +
+                "M12,12 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0",
+            evenOdd = true,
+        )
+    }
+
+    private fun icon(name: String, path: String, evenOdd: Boolean = false): ImageVector =
         ImageVector.Builder(
             name = name,
             defaultWidth = 24.dp,
@@ -42,6 +58,10 @@ object DToxIcons {
             viewportWidth = 24f,
             viewportHeight = 24f,
         )
-            .addPath(pathData = addPathNodes(path), fill = SolidColor(Color(0xFF000000)))
+            .addPath(
+                pathData = addPathNodes(path),
+                pathFillType = if (evenOdd) PathFillType.EvenOdd else PathFillType.NonZero,
+                fill = SolidColor(Color(0xFF000000)),
+            )
             .build()
 }
