@@ -155,13 +155,20 @@ fun SettingsScreen(
             Spacer(Modifier.height(16.dp))
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("D-Tox 1.3.0", style = MaterialTheme.typography.titleMedium)
+                    Text("D-Tox 1.3.1", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = "Zero permissions. No internet. No background services. " +
                             "No accounts. No subscriptions. Gems are earned by practicing — " +
                             "never sold. Nothing ever leaves this phone.",
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "Ambient sounds are real recordings (CC0 / CC BY 3.0 / CC BY-SA 4.0). " +
+                            "Full credits in LICENSES.md in the repository.",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }

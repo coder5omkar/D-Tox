@@ -14,7 +14,7 @@ subscription — and **zero Android permissions**.
 [![Downloads](https://img.shields.io/github/downloads/coder5omkar/D-Tox/total?style=flat-square&color=blue)](https://github.com/coder5omkar/D-Tox/releases)
 ![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white)
 ![Permissions](https://img.shields.io/badge/permissions-0-brightgreen?style=flat-square)
-![APK size](https://img.shields.io/badge/APK-1.3%20MB-blue?style=flat-square)
+![APK size](https://img.shields.io/badge/APK-2.5%20MB-blue?style=flat-square)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square)](LICENSE)
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.4.21-7F52FF?style=flat-square&logo=kotlin&logoColor=white)
@@ -52,9 +52,11 @@ mindfulness space:
 - **Progress page** — sessions, total time practiced, days, current and best
   streak, a 7-day chart and a per-exercise breakdown
 - **Calming sounds** — rain, ocean, stream and forest-with-birds, played
-  during exercises. Every sound is **synthesised in code**: no audio files,
-  no downloads, no permissions, no size cost. It fades in, pauses for phone
-  calls and stops when you're done.
+  during exercises. These are **real field recordings** (CC0 / CC BY), trimmed
+  into seamless loops and loudness-normalised; full credits in
+  [LICENSES.md](LICENSES.md). No downloads, no permissions — the recordings
+  ship inside the app. Sound fades in, pauses for phone calls and stops when
+  you're done.
 - **Shop** — spend gems on two extra themes (Midnight, Paper) and two rare
   breathing patterns (Coherent 6·6, Extended Exhale 4·8)
 - **Zen mode** — hide gems, streaks and the plant; just exercises
@@ -68,7 +70,7 @@ stats side by side in equal cards, plus your plant's current stage.
 
 | | Typical detox app | **D-Tox** |
 | --- | --- | --- |
-| Size | 30–150 MB | **1.3 MB** |
+| Size | 30–150 MB | **2.5 MB** |
 | Price | Subscription | **Free (GPL-3.0)** |
 | Android permissions | Accessibility, usage access, network… | **None** |
 | Internet | Ads, analytics, accounts | **No `INTERNET` permission at all** |
@@ -151,8 +153,8 @@ shortcut is the only easy way in.
 - **Progress page** — totals, streaks, a 7-day chart and a per-exercise
   breakdown with time practiced
 - Shop with themes and extra breathing patterns — gems only, never money
-- Calming ambient sounds (rain, ocean, stream, forest) — synthesised in code,
-  no files, no permissions
+- Calming ambient sounds (rain, ocean, stream, forest) — real recordings,
+  seamless loops, credited in LICENSES.md
 - Zen mode for a pure, reward-free practice
 - "The science" page with the real citations, and honest caveats
 
@@ -215,8 +217,8 @@ app/src/main/java/com/dtox/app/
 - Kotlin 2.4.21 · Jetpack Compose (BOM 2026.09) · Material 3
 - AGP 9.4.1 (built-in Kotlin) · Gradle 9.8.1
 - `minSdk 26` (Android 8.0) · `compileSdk 37` · `targetSdk 37`
-- Release build: R8 + resource shrinking → ~1.3 MB APK (the whole practice
-  module added ~50 KB)
+- Release build: R8 + resource shrinking → ~2.5 MB APK (practice module code
+  ~50 KB; the four recorded ambience loops ~1.1 MB)
 
 ### Signing a release build
 
@@ -242,4 +244,5 @@ bottom of the Progress page in the app.
 ## License
 
 [GPL-3.0](LICENSE) — free to use, study, share and improve. Derivative works
-stay open source too.
+stay open source too. Third-party assets (the ambient recordings) are
+credited in [LICENSES.md](LICENSES.md).
