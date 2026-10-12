@@ -12,6 +12,7 @@ subscription — and **zero Android permissions**.
 
 [![Release](https://img.shields.io/github/v/release/coder5omkar/D-Tox?style=flat-square&color=blueviolet&label=release)](https://github.com/coder5omkar/D-Tox/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/coder5omkar/D-Tox/total?style=flat-square&color=blue)](https://github.com/coder5omkar/D-Tox/releases)
+[![Web app](https://img.shields.io/badge/web-play%20in%20browser-3DDC84?style=flat-square)](https://coder5omkar.github.io/D-Tox/)
 ![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white)
 ![Permissions](https://img.shields.io/badge/permissions-0-brightgreen?style=flat-square)
 ![APK size](https://img.shields.io/badge/APK-2.5%20MB-blue?style=flat-square)
@@ -120,6 +121,23 @@ gradlew.bat assembleRelease    # minified release build
 
 Requirements: Android Studio (recent) or a terminal with JDK 17–21. The build
 automatically uses Android Studio's bundled JDK (see `gradle.properties`).
+
+## Web version (practice only)
+
+Just want the mindfulness side on a big screen — no blocker, no install?
+Open **https://coder5omkar.github.io/D-Tox/**
+
+The same 8 exercises, gems, streaks, plant, shop, sounds and science page as
+a tiny browser app, with extra playfulness:
+
+- Confetti celebrations, a swaying plant you can poke, an animated breathing
+  ring, mood check-ins, a 7-day chart and a plant growth path
+- The same real recorded ambience, looped gaplessly with the Web Audio API
+- Zero dependencies, works offline, installable to your home screen (PWA)
+- Everything stays in your browser's local storage — no accounts, no tracking
+- Add `?seed=1` to the URL to see a demo state with history filled in
+
+Source lives in [`docs/`](docs/).
 
 ## First-run setup
 
