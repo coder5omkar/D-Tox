@@ -33,6 +33,7 @@ import com.dtox.app.data.exerciseById
 import com.dtox.app.data.loadLaunchableApps
 import com.dtox.app.ui.practice.ExercisePlayerScreen
 import com.dtox.app.ui.practice.PracticeHomeScreen
+import com.dtox.app.ui.practice.ProgressScreen
 import com.dtox.app.ui.practice.ShopScreen
 import com.dtox.app.ui.theme.AppTheme
 import com.dtox.app.ui.theme.DToxTheme
@@ -41,7 +42,7 @@ import com.dtox.app.util.pinGateShortcut
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-private enum class Screen { HOME, PICKER, SETTINGS, PRACTICE, SHOP, SCIENCE, PLAYER }
+private enum class Screen { HOME, PICKER, SETTINGS, PRACTICE, SHOP, SCIENCE, PROGRESS, PLAYER }
 
 @Composable
 fun DToxRoot(
@@ -157,7 +158,16 @@ fun DToxRoot(
                         screen = Screen.PLAYER
                     },
                     onShop = { screen = Screen.SHOP },
+                    onProgress = { screen = Screen.PROGRESS },
                     onScience = { screen = Screen.SCIENCE },
+                )
+
+                screen == Screen.PROGRESS -> ProgressScreen(
+                    store = store,
+                    onBack = {
+                        refreshPractice()
+                        screen = Screen.PRACTICE
+                    },
                 )
 
                 screen == Screen.SHOP -> ShopScreen(
@@ -199,6 +209,9 @@ fun DToxRoot(
                     pausesToday = prefs.pausesToday(),
                     totalPauses = prefs.totalPauses,
                     totalSeconds = prefs.totalSeconds,
+                    gems = gems,
+                    sessions = sessions,
+                    streak = streak,
                     onSettings = { screen = Screen.SETTINGS },
                     onPractice = { screen = Screen.PRACTICE },
                     onPickApps = { screen = Screen.PICKER },

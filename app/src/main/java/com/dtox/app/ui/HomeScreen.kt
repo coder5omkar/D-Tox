@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.dtox.app.data.AppInfo
+import com.dtox.app.data.PracticeStore
 
 @Composable
 fun HomeScreen(
@@ -44,6 +45,9 @@ fun HomeScreen(
     pausesToday: Int,
     totalPauses: Int,
     totalSeconds: Long,
+    gems: Int,
+    sessions: Int,
+    streak: Int,
     onSettings: () -> Unit,
     onPractice: () -> Unit,
     onPickApps: () -> Unit,
@@ -62,13 +66,6 @@ fun HomeScreen(
                 color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = onPractice) {
-                Icon(
-                    imageVector = DToxIcons.Practice,
-                    contentDescription = "Practice",
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
             IconButton(onClick = onSettings) {
                 Icon(
                     imageVector = DToxIcons.Settings,
@@ -78,19 +75,34 @@ fun HomeScreen(
             }
         }
 
-        Card(
+        Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Stat("Pauses today", pausesToday.toString())
-                Stat("All time", totalPauses.toString())
-                Stat("Time breathed", formatSeconds(totalSeconds))
-            }
+            GateSummaryCard(
+                pausesToday = pausesToday,
+                totalPauses = totalPauses,
+                totalSeconds = totalSeconds,
+                modifier = Modifier.weight(1f),
+            )
+            PracticeSummaryCard(
+                gems = gems,
+                sessions = sessions,
+                streak = streak,
+                onClick = onPractice,
+                modifier = Modifier.weight(1f),
+            )
         }
+
+        Text(
+            text = "🌱 Your plant grows with every practice session — currently: " +
+                PracticeStore.plantStageName(PracticeStore.plantStage(sessions)) +
+                ". Tap Practice to see it.",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 28.dp),
+        )
 
         when {
             loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -129,17 +141,82 @@ fun HomeScreen(
 }
 
 @Composable
-private fun Stat(label: String, value: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun GateSummaryCard(
+    pausesToday: Int,
+    totalPauses: Int,
+    totalSeconds: Long,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+    ) {
+        Column(Modifier.fillMaxWidth().padding(14.dp)) {
+            Text(
+                text = "GATE",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(8.dp))
+            MiniStat(pausesToday.toString(), "today")
+            MiniStat(totalPauses.toString(), "all time")
+            MiniStat(formatSeconds(totalSeconds), "breathed")
+        }
+    }
+}
+
+@Composable
+private fun PracticeSummaryCard(
+    gems: Int,
+    sessions: Int,
+    streak: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+    ) {
+        Column(Modifier.fillMaxWidth().padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "PRACTICE",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "›",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            MiniStat("💎 $gems", "gems")
+            MiniStat(sessions.toString(), "sessions")
+            MiniStat(if (streak > 0) "$streak 🔥" else "—", "day streak")
+        }
+    }
+}
+
+@Composable
+private fun MiniStat(value: String, label: String) {
+    Row(
+        modifier = Modifier.padding(vertical = 1.dp),
+        verticalAlignment = Alignment.Bottom,
+    ) {
         Text(
             text = value,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
         )
+        Spacer(Modifier.width(6.dp))
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 2.dp),
         )
     }
 }

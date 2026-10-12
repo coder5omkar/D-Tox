@@ -43,6 +43,7 @@ fun PracticeHomeScreen(
     onBack: () -> Unit,
     onStartExercise: (Exercise) -> Unit,
     onShop: () -> Unit,
+    onProgress: () -> Unit,
     onScience: () -> Unit,
 ) {
     val stage = PracticeStore.plantStage(sessions)
@@ -69,42 +70,71 @@ fun PracticeHomeScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 28.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 28.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             if (!zenMode) {
                 item(key = "plant") {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                    Column {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                         ) {
-                            PlantView(
-                                stage = stage,
-                                wilting = wilting,
-                                modifier = Modifier.fillMaxWidth().height(130.dp),
-                            )
-                            Spacer(Modifier.height(8.dp))
-                            Text(
-                                text = PracticeStore.plantStageName(stage),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Spacer(Modifier.height(2.dp))
-                            Text(
-                                text = if (streak > 1) {
-                                    "Day $streak streak 🔥 · $sessions sessions"
-                                } else {
-                                    "$sessions sessions"
-                                },
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 10.dp, top = 10.dp, bottom = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = PracticeStore.plantStageName(stage),
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                    Spacer(Modifier.height(2.dp))
+                                    Text(
+                                        text = if (streak > 1) {
+                                            "Day $streak streak 🔥 · $sessions sessions"
+                                        } else {
+                                            "$sessions sessions"
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                    PracticeStore.nextStageAt(sessions)?.let { next ->
+                                        Spacer(Modifier.height(2.dp))
+                                        Text(
+                                            text = "Next growth at $next sessions",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
+                                    }
+                                }
+                                PlantView(
+                                    stage = stage,
+                                    wilting = wilting,
+                                    modifier = Modifier.width(150.dp).height(92.dp),
+                                )
+                            }
                         }
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            text = "🌱 This plant grows with you — one stage for every milestone: " +
+                                "1, 5, 15, 30, 60, 100 and 200 sessions. It never dies; it only dims " +
+                                "a little when you're away.",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 6.dp),
+                        )
                     }
                 }
+            }
+
+            item(key = "exercises-title") {
+                Text(
+                    text = "Exercises",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+                )
             }
 
             items(Exercises, key = { it.id }) { exercise ->
@@ -117,16 +147,19 @@ fun PracticeHomeScreen(
 
             item(key = "links") {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     if (!zenMode) {
                         OutlinedButton(onClick = onShop, modifier = Modifier.weight(1f)) {
                             Text("Shop")
                         }
+                        OutlinedButton(onClick = onProgress, modifier = Modifier.weight(1f)) {
+                            Text("Progress")
+                        }
                     }
                     OutlinedButton(onClick = onScience, modifier = Modifier.weight(1f)) {
-                        Text("The science")
+                        Text("Science")
                     }
                 }
             }

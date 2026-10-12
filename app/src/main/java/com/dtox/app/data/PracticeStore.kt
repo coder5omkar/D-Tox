@@ -79,6 +79,53 @@ class PracticeStore(context: Context) {
 
     fun sessionsFor(exerciseId: String): Int = sp.getInt("sessions:" + exerciseId, 0)
 
+    // ---- dashboard counters ---------------------------------------------
+
+    /** Total seconds spent practicing (all exercises). */
+    val practiceSeconds: Int get() = sp.getInt(KEY_PRACTICE_SECONDS, 0)
+
+    /** Seconds spent on one exercise. */
+    fun secondsFor(exerciseId: String): Int = sp.getInt("seconds:" + exerciseId, 0)
+
+    /** Number of distinct days with at least one session. */
+    val daysPracticed: Int get() = sp.getInt(KEY_DAYS_PRACTICED, 0)
+
+    /** Longest streak ever reached. */
+    val bestStreak: Int get() = sp.getInt(KEY_BEST_STREAK, 0)
+
+    /** Per-day session counts for the last [days] days, oldest first. */
+    fun recentDays(days: Int): List<Pair<LocalDate, Int>> {
+        val stored = parseDayCounts()
+        val today = LocalDate.now()
+        return (days - 1 downTo 0).map { offset ->
+            val date = today.minusDays(offset.toLong())
+            date to (stored[date.toString()] ?: 0)
+        }
+    }
+
+    private fun parseDayCounts(): Map<String, Int> =
+        (sp.getString(KEY_DAY_COUNTS, "") ?: "")
+            .split(';')
+            .mapNotNull { entry ->
+                val parts = entry.split('=')
+                if (parts.size == 2) parts[0] to (parts[1].toIntOrNull() ?: 0) else null
+            }
+            .toMap()
+
+    private fun bumpTodayCount() {
+        val today = LocalDate.now()
+        val stored = parseDayCounts().toMutableMap()
+        val key = today.toString()
+        stored[key] = (stored[key] ?: 0) + 1
+        val cutoff = today.minusDays(14)
+        val pruned = stored.filterKeys { k ->
+            runCatching { LocalDate.parse(k).isAfter(cutoff) }.getOrDefault(false)
+        }
+        sp.edit {
+            putString(KEY_DAY_COUNTS, pruned.entries.joinToString(";") { "${it.key}=${it.value}" })
+        }
+    }
+
     private val lastSessionDay: String? get() = sp.getString(KEY_LAST_DAY, null)
 
     /** True when no practice session has happened yet today. */
@@ -132,9 +179,14 @@ class PracticeStore(context: Context) {
         sp.edit {
             putInt(KEY_SESSIONS, totalSessions + 1)
             putInt("sessions:" + exercise.id, sessionsFor(exercise.id) + 1)
+            putInt("seconds:" + exercise.id, secondsFor(exercise.id) + exercise.durationSeconds)
+            putInt(KEY_PRACTICE_SECONDS, practiceSeconds + exercise.durationSeconds)
             putString(KEY_LAST_DAY, todayStr)
             putInt(KEY_STREAK, newStreak)
+            putInt(KEY_BEST_STREAK, maxOf(bestStreak, newStreak))
+            if (firstToday) putInt(KEY_DAYS_PRACTICED, daysPracticed + 1)
         }
+        bumpTodayCount()
 
         val stageAfter = plantStage(totalSessions)
 
@@ -190,6 +242,9 @@ class PracticeStore(context: Context) {
         fun plantStageName(stage: Int): String =
             PLANT_STAGE_NAMES[stage.coerceIn(0, PLANT_STAGE_NAMES.lastIndex)]
 
+        /** Sessions needed for the next growth stage, or null at the last one. */
+        fun nextStageAt(sessions: Int): Int? = PLANT_STAGES.firstOrNull { it > sessions }
+
         private const val KEY_GEMS = "gems"
         private const val KEY_ZEN = "zen_mode"
         private const val KEY_THEME = "theme"
@@ -198,5 +253,9 @@ class PracticeStore(context: Context) {
         private const val KEY_STREAK = "streak"
         private const val KEY_LAST_DAY = "last_session_day"
         private const val KEY_GRACE = "grace_for_day"
+        private const val KEY_PRACTICE_SECONDS = "practice_seconds"
+        private const val KEY_DAYS_PRACTICED = "days_practiced"
+        private const val KEY_BEST_STREAK = "best_streak"
+        private const val KEY_DAY_COUNTS = "day_counts"
     }
 }

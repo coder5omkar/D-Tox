@@ -23,7 +23,7 @@ subscription — and **zero Android permissions**.
 
 <img src="docs/screenshots/01-home.png" width="190" />&nbsp;<img src="docs/screenshots/02-picker.png" width="190" />&nbsp;<img src="docs/screenshots/03-breath.png" width="190" />&nbsp;<img src="docs/screenshots/04-ready.png" width="190" />
 
-<img src="docs/screenshots/06-practice.png" width="190" />&nbsp;<img src="docs/screenshots/07-breath.png" width="190" />&nbsp;<img src="docs/screenshots/08-shop.png" width="190" />&nbsp;<img src="docs/screenshots/09-zen.png" width="190" />
+<img src="docs/screenshots/06-practice.png" width="190" />&nbsp;<img src="docs/screenshots/07-breath.png" width="190" />&nbsp;<img src="docs/screenshots/10-progress.png" width="190" />&nbsp;<img src="docs/screenshots/08-shop.png" width="190" />
 
 </div>
 
@@ -38,21 +38,27 @@ until the breath is finished.
 
 ### Practice — the other half
 
-Open **Practice** from the home screen for a small, self-contained mindfulness
-space:
+Open **Practice** from the front screen for a small, self-contained
+mindfulness space:
 
 - **8 exercises** — Box Breathing, 4·7·8, Cyclic Sighing, Three Sighs,
   5·4·3·2·1 Grounding, Body Scan, Feel Your Feet, One Good Thing
 - **Mood check-ins** before and after — if your mood lifts, +1 bonus gem
 - **Gems** earned by practicing, never sold (1–3 per exercise plus bonuses)
 - **Streaks** with one grace day, so a single missed day doesn't wipe it
-- **A plant that grows** across 8 stages, drawn entirely in code; it dulls
-  after a few idle days but never dies
+- **A plant that grows with you** — one stage for every milestone
+  (1, 5, 15, 30, 60, 100, 200 sessions), drawn entirely in code. It never
+  dies; it only dims a little when you're away.
+- **Progress page** — sessions, total time practiced, days, current and best
+  streak, a 7-day chart and a per-exercise breakdown
 - **Shop** — spend gems on two extra themes (Midnight, Paper) and two rare
   breathing patterns (Coherent 6·6, Extended Exhale 4·8)
 - **Zen mode** — hide gems, streaks and the plant; just exercises
 - **The science** — a plain-language page with the actual studies behind the
   exercises, and honest caveats
+
+The front screen shows **both sides at a glance** — gate stats and practice
+stats side by side in equal cards, plus your plant's current stage.
 
 ## Why D-Tox is different
 
@@ -138,9 +144,16 @@ shortcut is the only easy way in.
   gratitude practices
 - Mood check-ins with a small bonus when you feel better afterwards
 - Gems, streaks with a grace day, and a plant that grows across 8 stages
+- **Progress page** — totals, streaks, a 7-day chart and a per-exercise
+  breakdown with time practiced
 - Shop with themes and extra breathing patterns — gems only, never money
 - Zen mode for a pure, reward-free practice
 - "The science" page with the real citations, and honest caveats
+
+**The front screen**
+
+- Gate stats and Practice stats in two equal cards, side by side
+- One line explains what the plant is and how it grows
 
 **The fundamentals**
 

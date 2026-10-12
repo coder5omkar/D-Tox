@@ -155,7 +155,7 @@ fun SettingsScreen(
             Spacer(Modifier.height(16.dp))
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("D-Tox 1.1.0", style = MaterialTheme.typography.titleMedium)
+                    Text("D-Tox 1.2.0", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = "Zero permissions. No internet. No background services. " +
