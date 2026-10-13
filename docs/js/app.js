@@ -21,6 +21,17 @@ const THEME_PREVIEW = {
   paper: ['#f7f4ee', '#39694f', '#efeae0'],
 };
 
+// PWA install prompt
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  installPrompt = event;
+});
+window.addEventListener('appinstalled', () => {
+  installPrompt = null;
+  toast('Installed — find D-Tox on your home screen 🎉');
+});
+
 // ---------------------------------------------------------------- helpers
 
 const el = (tag, cls, html) => {
@@ -105,6 +116,7 @@ let currentScreen = 'home';
 function showScreen(name) {
   currentScreen = name;
   $$('.screen').forEach((s) => s.classList.toggle('active', s.id === `screen-${name}`));
+  $$('.tabbar a').forEach((a) => a.classList.toggle('active', a.dataset.tab === name));
   document.body.classList.toggle('zen', store.zen);
   if (name === 'home') renderHome();
   if (name === 'progress') renderProgress();
@@ -119,6 +131,7 @@ function hidePlayer() {
   if (breath) { cancelAnimationFrame(breath.raf); breath = null; }
   if (steps) { clearInterval(steps.timer); steps = null; }
   $('#player').classList.add('hidden');
+  document.body.classList.remove('player-open');
   player.ex = null;
 }
 
@@ -218,6 +231,7 @@ function openPlayer(id) {
   player.completion = null;
   player.bonusGiven = false;
   $('#player').classList.remove('hidden');
+  document.body.classList.add('player-open');
   const skipMood = store.zen || new URLSearchParams(location.search).has('skipmood');
   if (skipMood) {
     startActive();
@@ -691,7 +705,11 @@ function renderSettings() {
   };
 
   $('#settingsBody').innerHTML = `
-    <div class="card">
+    <div class="card setting-row hidden" id="installRow">
+      <span><b>Install D-Tox</b><small id="installHint">Add it to your home screen — full screen, works offline</small></span>
+      <button class="btn small" id="installBtn">Install</button>
+    </div>
+    <div class="card"${''}>
       <div class="setting-row">
         <span><b>Zen mode</b><small>Hide gems, streaks and the plant — just exercises</small></span>
         <label class="switch">
@@ -740,6 +758,28 @@ function renderSettings() {
     document.body.classList.toggle('zen', store.zen);
     toast(store.zen ? 'Zen mode on 🧘' : 'Zen mode off ✨');
   };
+
+  // install row: native prompt where available, iOS hint otherwise
+  const installRow = $('#installRow');
+  const installBtn = $('#installBtn');
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (standalone) {
+    installRow.classList.remove('hidden');
+    installRow.querySelector('b').textContent = 'D-Tox is installed ✓';
+    installBtn.classList.add('hidden');
+  } else if (installPrompt) {
+    installRow.classList.remove('hidden');
+    installBtn.onclick = async () => {
+      installPrompt.prompt();
+      try { await installPrompt.userChoice; } catch { /* dismissed */ }
+      installPrompt = null;
+      renderSettings();
+    };
+  } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    installRow.classList.remove('hidden');
+    installBtn.classList.add('hidden');
+    $('#installHint').textContent = 'In Safari: tap Share → “Add to Home Screen”';
+  }
 
   $$('#settingsBody [data-theme]').forEach((btn) => {
     btn.onclick = () => {

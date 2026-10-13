@@ -1,5 +1,5 @@
 // Offline-first: cache everything once, then serve from cache.
-const CACHE = 'dtox-web-v2';
+const CACHE = 'dtox-web-v3';
 const CORE = [
   './',
   './index.html',

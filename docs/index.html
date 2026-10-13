@@ -6,6 +6,9 @@
   <title>D-Tox Practice 🌿</title>
   <meta name="description" content="A tiny, playful mindfulness studio: 8 exercises, gems, streaks and a plant that grows with you. No accounts, no tracking, no app blocker — just practice.">
   <meta name="theme-color" content="#0A1210">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="D-Tox">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="img/icon-192.png">
   <link rel="apple-touch-icon" href="img/icon-192.png">
@@ -44,18 +47,12 @@
       <h3 class="section-title">Exercises</h3>
       <div class="grid" id="exerciseGrid"></div>
 
-      <div class="row-buttons">
-        <a class="btn ghost" href="#/progress">📊 Progress</a>
-        <a class="btn ghost" href="#/shop">🛍️ Shop</a>
-        <a class="btn ghost" href="#/science">🔬 Science</a>
-      </div>
       <p class="footnote">Gems are earned by practicing — never sold. Everything is stored in your browser only.</p>
     </section>
 
     <!-- PROGRESS -->
     <section class="screen" id="screen-progress">
       <div class="screen-head">
-        <a class="btn ghost small" href="#/home">← Back</a>
         <h2>Progress</h2>
       </div>
       <div id="progressBody"></div>
@@ -64,7 +61,6 @@
     <!-- SHOP -->
     <section class="screen" id="screen-shop">
       <div class="screen-head">
-        <a class="btn ghost small" href="#/home">← Back</a>
         <h2>Shop</h2>
         <span class="chip">💎 <b id="shopGems">0</b></span>
       </div>
@@ -74,7 +70,6 @@
     <!-- SCIENCE -->
     <section class="screen" id="screen-science">
       <div class="screen-head">
-        <a class="btn ghost small" href="#/home">← Back</a>
         <h2>The science</h2>
       </div>
       <div class="card pad" id="scienceBody"></div>
@@ -83,7 +78,6 @@
     <!-- SETTINGS -->
     <section class="screen" id="screen-settings">
       <div class="screen-head">
-        <a class="btn ghost small" href="#/home">← Back</a>
         <h2>Settings</h2>
       </div>
       <div id="settingsBody"></div>
@@ -164,6 +158,14 @@
     </div>
 
   </div>
+
+  <nav class="tabbar" aria-label="Sections">
+    <a href="#/home" data-tab="home"><i>🏠</i>Home</a>
+    <a href="#/progress" data-tab="progress"><i>📊</i>Progress</a>
+    <a href="#/shop" data-tab="shop"><i>🛍️</i>Shop</a>
+    <a href="#/science" data-tab="science"><i>🔬</i>Science</a>
+    <a href="#/settings" data-tab="settings"><i>⚙️</i>Settings</a>
+  </nav>
 
   <canvas id="confettiCanvas" aria-hidden="true"></canvas>
   <div class="toast hidden" id="toast"></div>
