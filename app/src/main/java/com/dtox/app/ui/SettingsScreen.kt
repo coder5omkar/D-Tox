@@ -40,6 +40,7 @@ fun SettingsScreen(
     store: PracticeStore,
     zenMode: Boolean,
     onZenChange: (Boolean) -> Unit,
+    onShield: () -> Unit,
     onBack: () -> Unit,
 ) {
     var breathSeconds by remember { mutableIntStateOf(prefs.breathSeconds) }
@@ -128,6 +129,43 @@ fun SettingsScreen(
             )
 
             Spacer(Modifier.height(24.dp))
+            SectionLabel("Shield")
+            Card(
+                onClick = onShield,
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = DToxIcons.Shield,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text("Shield mode", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = if (prefs.shieldEnabled) {
+                                "On — breathing before every gated launch"
+                            } else {
+                                "Off — breath in front of every launch"
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Text(
+                        text = "›",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
             SectionLabel("Practice")
             SwitchRow(
                 title = "Zen mode",
@@ -155,7 +193,7 @@ fun SettingsScreen(
             Spacer(Modifier.height(16.dp))
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("D-Tox 1.3.1", style = MaterialTheme.typography.titleMedium)
+                    Text("D-Tox 1.4.0", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = "Zero permissions. No internet. No background services. " +

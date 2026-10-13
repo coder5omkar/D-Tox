@@ -39,6 +39,23 @@ class Prefs(context: Context) {
         get() = sp.getBoolean(KEY_SKIP, false)
         set(value) = sp.edit { putBoolean(KEY_SKIP, value) }
 
+    // ---- Shield mode ----------------------------------------------------
+
+    /** Master switch for the shield service. */
+    var shieldEnabled: Boolean
+        get() = sp.getBoolean(KEY_SHIELD_ON, false)
+        set(value) = sp.edit { putBoolean(KEY_SHIELD_ON, value) }
+
+    /** Package the user just opened through the shield gate. */
+    var shieldGracePackage: String
+        get() = sp.getString(KEY_SHIELD_GRACE_PKG, "") ?: ""
+        set(value) = sp.edit { putString(KEY_SHIELD_GRACE_PKG, value) }
+
+    /** Elapsed-realtime deadline for the current grace window. */
+    var shieldGraceUntil: Long
+        get() = sp.getLong(KEY_SHIELD_GRACE_UNTIL, 0L)
+        set(value) = sp.edit { putLong(KEY_SHIELD_GRACE_UNTIL, value) }
+
     fun pausesToday(): Int {
         rolloverIfNeeded()
         return sp.getInt(KEY_TODAY, 0)
@@ -79,5 +96,8 @@ class Prefs(context: Context) {
         const val KEY_TODAY = "pauses_today"
         const val KEY_TOTAL = "pauses_total"
         const val KEY_TOTAL_SECONDS = "seconds_total"
+        const val KEY_SHIELD_ON = "shield_enabled"
+        const val KEY_SHIELD_GRACE_PKG = "shield_grace_pkg"
+        const val KEY_SHIELD_GRACE_UNTIL = "shield_grace_until"
     }
 }

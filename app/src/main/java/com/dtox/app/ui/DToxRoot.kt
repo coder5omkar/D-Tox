@@ -42,7 +42,7 @@ import com.dtox.app.util.pinGateShortcut
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-private enum class Screen { HOME, PICKER, SETTINGS, PRACTICE, SHOP, SCIENCE, PROGRESS, PLAYER }
+private enum class Screen { HOME, PICKER, SETTINGS, SHIELD, PRACTICE, SHOP, SCIENCE, PROGRESS, PLAYER }
 
 @Composable
 fun DToxRoot(
@@ -94,6 +94,7 @@ fun DToxRoot(
     BackHandler(enabled = gateRequest == null && screen != Screen.HOME) {
         screen = when (screen) {
             Screen.PICKER, Screen.SETTINGS -> Screen.HOME
+            Screen.SHIELD -> Screen.SETTINGS
             else -> Screen.PRACTICE
         }
         refreshPractice()
@@ -140,10 +141,16 @@ fun DToxRoot(
                         store.zenMode = value
                         zenMode = value
                     },
+                    onShield = { screen = Screen.SHIELD },
                     onBack = {
                         refreshPractice()
                         screen = Screen.HOME
                     },
+                )
+
+                screen == Screen.SHIELD -> ShieldScreen(
+                    prefs = prefs,
+                    onBack = { screen = Screen.SETTINGS },
                 )
 
                 screen == Screen.PRACTICE -> PracticeHomeScreen(

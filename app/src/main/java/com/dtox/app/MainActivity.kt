@@ -13,6 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.dtox.app.ui.DToxRoot
+import com.dtox.app.data.Prefs
+import com.dtox.app.shield.ShieldManager
+import com.dtox.app.shield.ShieldService
 
 class MainActivity : ComponentActivity() {
 
@@ -29,6 +32,11 @@ class MainActivity : ComponentActivity() {
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
         )
+
+        // Re-arm shield mode whenever the app is opened (also covers reboot).
+        if (Prefs(this).shieldEnabled && ShieldManager.hasUsageAccess(this)) {
+            ShieldService.start(this)
+        }
 
         gateRequest = if (savedInstanceState != null) {
             savedInstanceState.getString(KEY_GATE)

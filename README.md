@@ -73,7 +73,7 @@ stats side by side in equal cards, plus your plant's current stage.
 | --- | --- | --- |
 | Size | 30–150 MB | **2.5 MB** |
 | Price | Subscription | **Free (GPL-3.0)** |
-| Android permissions | Accessibility, usage access, network… | **None** |
+| Android permissions | Accessibility, usage access, network… | **None by default** (Shield: 4 opt-in) |
 | Internet | Ads, analytics, accounts | **No `INTERNET` permission at all** |
 | Background | Always-on services | **Nothing runs when it's closed** |
 
@@ -98,6 +98,30 @@ the model: **D-Tox becomes the entry point.**
 That is the whole trick: zero permissions, zero battery cost, and nothing to
 bypass unless you go hunting through the app drawer, recents or settings.
 (Android keeps those last few doors open for any normal app.)
+
+### Shield mode — the gate everywhere (optional)
+
+The shortcut gate works when you enter through D-Tox. **Shield mode** is the
+opt-in upgrade that puts the breath screen in front of a gated app *no matter
+how it launched* — drawer, recents, search or a link. It adds four visible,
+revocable permissions:
+
+| Permission | What it is for |
+| --- | --- |
+| Usage access | Knows which app came to the foreground, to know when to gate |
+| Display over other apps | Lets the breath screen appear on top |
+| Notifications | The quiet “shield is on” status |
+| Battery optimization (optional) | Keeps the little watcher alive |
+
+It is **call-safe by design**: the dialer and in-call screen are never gated,
+and the watcher pauses itself whenever a call is active. After you open an app
+through the gate, it stays free until you leave it.
+
+Honest limit: Android doesn't let a normal app hide another app's icon or
+disable it outright. Shield gates every launch instead — true hiding would
+need a helper like Shizuku (possible future mode). The main app still has no
+INTERNET permission, and every Shield permission can be revoked in system
+settings.
 
 ### Phone calls are never touched
 
@@ -159,6 +183,8 @@ shortcut is the only easy way in.
 - Patterns: **Box 4·4·4·4**, **Calm 4·7·8**, **Sigh 3·1·6** (+ 2 unlockables)
 - Animated breathing ring with phase countdown, haptic ticks
 - Home-screen badge shortcuts, pinned straight from the app
+- **Shield mode (optional)** — breath in front of every launch, from anywhere,
+  with four visible, revocable permissions
 - **Open** locked until the breath completes (optional early-open switch)
 - Local stats: pauses today · all time · total time breathed
 
@@ -222,13 +248,11 @@ app/src/main/java/com/dtox/app/
 
 ## Roadmap
 
-- **"Hidden mode" (planned)** — optional integration with
-  [Shizuku](https://shizuku.rikka.app/) that truly hides gated apps from the
-  drawer, search and recents, and unhides them only for the breath-then-launch
-  flow. D-Tox itself would still declare zero Android permissions.
-- Accessibility "Shield" mode for a single-app alternative.
-- Ambient sounds, home-screen widget, custom breathing patterns, manual
-  backup/export.
+- **True hiding (Shizuku)** — optional integration with
+  [Shizuku](https://shizuku.rikka.app/) so gated apps vanish from the drawer,
+  search and recents entirely, unhidden only for the breath-then-open flow.
+  Shizuku grants shell-level powers through a one-time pairing.
+- Home-screen widget, custom breathing patterns, manual backup/export.
 
 ## Build details
 

@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  D-Tox asks for ZERO permissions on purpose.
-  No internet, no accessibility, no usage access, no overlay, no network state.
-  The gate works because you launch apps *through* D-Tox.
+  The main app keeps its zero-permission promise; Shield mode is an OPT-IN
+  extra that asks for exactly four things, all visible and revocable:
+  usage access, display over other apps, notifications and (optionally)
+  battery-optimization exemption. There is still no INTERNET permission.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Shield mode: see ShieldScreen for what each one is for. -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- Lets us list which apps are installed, without the sensitive
          QUERY_ALL_PACKAGES permission: only launcher apps are visible. -->
@@ -34,5 +46,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".shield.GateActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:taskAffinity="com.dtox.app.shield"
+            android:theme="@style/Theme.DTox.Gate" />
+
+        <service
+            android:name=".shield.ShieldService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="digital wellbeing: a breath gate before distracting apps open" />
+        </service>
+
+        <receiver
+            android:name=".shield.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
